@@ -1,8 +1,10 @@
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.result.Result
 import com.google.gson.Gson
 
 @JsonDeserialize
@@ -33,6 +35,24 @@ fun main(args: Array<String>) {
 
     println("Payload: $payload1")
     println("Error: $error1")
+
+    // ----------------------------------------------
+    val (request, response, result) = Fuel.post("http://hehe").response()
+
+    if (result is Result.Failure) {
+        println("It fails")
+    } else if (result is Result.Success) {
+        println("Success")
+    }
+
+    val (data, error) = result
+
+    if (error != null) {
+        println("It really fail")
+    } else {
+        println("Data = ${data.toString()}")
+    }
+    // ---------------------------------------------
 
     // Async call
     "https://jsonplaceholder.typicode.com/posts".httpGet()
